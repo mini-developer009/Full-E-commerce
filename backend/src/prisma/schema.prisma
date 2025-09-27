@@ -1,0 +1,223 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  ADMIN
+  STAF
+  SUPERADMIN
+  BUSINESS
+  USER
+}
+
+enum ProductStatus {
+  IN_STOCK
+  OUT_OF_STOCK
+}
+
+enum customerStatus {
+  ACTIVE
+  DISABLED
+}
+
+model User {
+  id                      String    @id @default(auto()) @map("_id") @db.ObjectId
+  name                    String
+  email                   String    @unique
+  password                String
+  phone                   String
+  address                 String
+  role                    UserRole  @default(USER)
+  isVerified              Boolean   @default(false)
+  verificationToken       String?   @unique
+  verificationTokenExpiry DateTime?
+  profileImage            String?   @default("https://ibb.co/q36v3f9w")
+  joinDate                DateTime  @default(now())
+  lastLogin               DateTime?
+  shop                    Shop[]
+  createdAt               DateTime  @default(now())
+  updatedAt               DateTime  @updatedAt
+
+  @@map("users")
+}
+
+model Staf {
+  id                      String    @id @default(auto()) @map("_id") @db.ObjectId
+  name                    String
+  email                   String    @unique
+  password                String
+  isVerified              Boolean   @default(false)
+  verificationToken       String?   @unique
+  verificationTokenExpiry DateTime?
+  position                String
+  address                 String
+  role                    String    @default("STAF")
+  profileImage            String?   @default("https://ibb.co/q36v3f9w")
+  phone                   String
+  shop                    Shop      @relation(fields: [shopId], references: [id])
+  shopId                  String    @db.ObjectId
+
+  @@map("stafs")
+}
+
+model Customer {
+  id          String         @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  fatherName  String?
+  motherName  String?
+  dateOfBirth String?
+  DueLimit    String?
+  shopName    String?
+  Ref         String?
+  email       String?
+  phone       String
+  address     String?
+  status      customerStatus
+  upazilla    String?
+  zipCode     String?
+  orders      Order[]
+  group       customerGroup? @relation(fields: [cgId], references: [id])
+  cgId        String?        @db.ObjectId
+  payment     PaymentInfo[]
+  road        String?
+  shop        Shop           @relation(fields: [shopId], references: [id])
+  shopId      String         @db.ObjectId
+
+  @@map("customers")
+}
+
+model customerGroup {
+  id       String     @id @default(auto()) @map("_id") @db.ObjectId
+  customer Customer[]
+  shop     Shop       @relation(fields: [shopId], references: [id])
+  shopId   String     @db.ObjectId
+  name     String
+  date     DateTime
+
+  @@map("customerGroups")
+}
+
+model PaymentInfo {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  product    Product  @relation(fields: [productId], references: [id])
+  productId  String   @db.ObjectId
+  customer   Customer @relation(fields: [customerId], references: [id])
+  customerId String   @db.ObjectId
+  shop       Shop     @relation(fields: [shopId], references: [id])
+  shopId     String   @db.ObjectId
+}
+
+enum OrderStatus {
+  PROCESSING
+  ACCEPTED
+  DELIVERED
+  COMPLETED
+}
+
+model Order {
+  id                 String      @id @default(auto()) @map("_id") @db.ObjectId
+  customer           Customer    @relation(fields: [customerId], references: [id])
+  customerId         String      @db.ObjectId
+  shop               Shop        @relation(fields: [shopId], references: [id])
+  shopId             String      @db.ObjectId
+  method             String?
+  totalOriginalPrice Float
+  status             OrderStatus
+  discount           Float
+  transportFare      Float?
+  LabourCost         Float?
+  invoiceBill        Float
+  prevDue            Float?
+  Vat                Float
+  payment            Float
+  totalDue           Float?
+ createdAt         DateTime   @default(now())
+  updatedAt         DateTime   @updatedAt
+  @@map("orders")
+}
+
+model Suppliers {
+  id           String  @id @default(auto()) @map("_id") @db.ObjectId
+  name         String
+  phone        String
+  email        String
+  prevdueMoney Float?
+  CompanyName  String
+  address      String
+  city         String
+  zipCode      String
+  country      String
+  domain       String
+  bankAccount  String
+  file         String?
+  shop         Shop    @relation(fields: [shopId], references: [id])
+  shopId       String  @db.ObjectId
+ createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  @@map("suppliers")
+}
+
+model Product {
+  id          String        @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  img         String
+  price       Float
+  description String
+  status      ProductStatus
+  shop        Shop          @relation(fields: [shopId], references: [id])
+  shopId      String        @db.ObjectId
+  payment     PaymentInfo[]
+  category    PCateory      @relation(fields: [categoryId], references: [id])
+  categoryId  String        @db.ObjectId
+  variant     Pvariant      @relation(fields: [variantId], references: [id])
+  variantId   String        @db.ObjectId
+
+  @@map("products")
+}
+
+model Pvariant {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  type        String
+  description String
+  shop       Shop      @relation(fields: [shopId], references: [id])
+  shopId      String    @db.ObjectId
+  product     Product[]
+
+  @@map("pvariant")
+}
+
+model PCateory {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  description String
+  shop        Shop      @relation(fields: [shopId], references: [id])
+  shopId      String    @db.ObjectId
+  product     Product[]
+
+  @@map("pcategory")
+}
+
+model Shop {
+  id             String          @id @default(auto()) @map("_id") @db.ObjectId
+  user           User            @relation(fields: [userId], references: [id])
+  userId         String          @unique @db.ObjectId
+  name           String          @unique
+  shopImg        String
+  email          String
+  address        String
+  staf           Staf[]
+  orders         Order[]
+  CustomerGroups customerGroup[]
+  suppliers      Suppliers[]
+  customers      Customer[]
+  products       Product[]
+  payment        PaymentInfo[]
+  variants      Pvariant[]
+  categories     PCateory[]
+  @@map("shops")
+}

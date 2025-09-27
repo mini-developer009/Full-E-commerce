@@ -1,0 +1,8 @@
+//if shop want to delete have to delete those
+
+customers:true,
+suppliers:true,
+products:true,
+staf:true,
+orders:true,
+CustomerGroups:true

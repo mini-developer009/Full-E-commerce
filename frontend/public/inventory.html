@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="bn" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Royalit - শীঘ্রই আসছে</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'hind': ['Hind Siliguri', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#3b82f6',
+                        primaryLight: '#60a5fa',
+                        primaryDark: '#2563eb',
+                        bgDark: '#0a0a0a',
+                        bgLight: '#1a1a1a',
+                        textPrimary: '#f8fafc',
+                        textSecondary: '#94a3b8',
+                    },
+                    animation: {
+                        subtleZoom: 'subtleZoom 40s ease-in-out infinite',
+                        float: 'float 6s ease-in-out infinite',
+                        pulse: 'pulse 4s ease-in-out infinite',
+                        fadeInUp: 'fadeInUp 0.8s ease-out forwards',
+                        fadeIn: 'fadeIn 1s ease-out forwards',
+                    },
+                    keyframes: {
+                        subtleZoom: {
+                            '0%, 100%': { backgroundSize: '300px 300px' },
+                            '50%': { backgroundSize: '310px 310px' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        },
+                        pulse: {
+                            '0%, 100%': { opacity: '1' },
+                            '50%': { opacity: '0.8' },
+                        },
+                        fadeInUp: {
+                            from: { opacity: '0', transform: 'translateY(20px)' },
+                            to: { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        fadeIn: {
+                            from: { opacity: '0' },
+                            to: { opacity: '1' },
+                        },
+                    },
+                },
+            },
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer base {
+      body {
+        @apply bg-bgDark bg-[url('https://www.transparenttextures.com/patterns/carbon-fiber-v2.png')] bg-[length:300px_300px] relative overflow-x-hidden font-hind text-textPrimary;
+        animation: subtleZoom;
+      }
+      body::before {
+        @apply content-[""] fixed inset-0 bg-[radial-gradient(ellipse_at_center,rgba(10,10,10,0.9)_0%,rgba(10,10,10,0.95)_100%)] z-0 pointer-events-none;
+      }
+    }
+    @layer components {
+      .logo-container {
+        @apply relative w-20 h-20 mx-auto flex justify-center items-center;
+        animation: float;
+      }
+      .logo {
+        @apply w-full h-full object-contain filter drop-shadow-[0_0_8px_rgba(59,130,246,0.4)] transition-transform duration-300 ease-in-out;
+      }
+      .logo-container::after {
+        @apply content-[""] absolute w-[120%] h-[120%] rounded-full bg-[radial-gradient(circle,rgba(59,130,246,0.15)_0%,transparent_70%)] -z-10;
+        animation: pulse;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+    <main id="content"
+        class="relative z-10 max-w-full px-6 w-full text-center flex flex-col justify-center items-center min-h-screen gap-7"
+        role="main" aria-label="শীঘ্রই আসছে">
+        <div class="logo-container">
+            <img src="" alt="RoyalitBD লোগো" class="logo" width="80" height="80"
+                loading="lazy" />
+        </div>
+
+        <h1
+            class="font-bold text-[clamp(2rem,6vw,3rem)] leading-tight m-0 bg-gradient-to-r from-textPrimary from-60% to-primaryLight bg-clip-text text-transparent shadow-[0_2px_4px_rgba(0,0,0,0.2)]">
+            RoyalitBD <span
+                class="inline-block bg-gradient-to-r from-primary to-primaryLight bg-clip-text text-transparent">শীঘ্রই
+                আসছে</span>
+        </h1>
+
+        <p
+            class="description text-textSecondary text-[clamp(1.05rem,3vw,1.25rem)] m-0 max-w-[36rem] mx-auto leading-relaxed opacity-0 translate-y-5 animate-fadeInUp [animation-delay:300ms]">
+            আমরা একটি উদ্ভাবনী ইনভেন্টরি ব্যবস্থাপনা সিস্টেম তৈরি করছি যা আপনার ব্যবসায়িক কার্যক্রমকে আধুনিক প্রযুক্তি
+            এবং সহজবোধ্য ডিজাইনের মাধ্যমে সহজতর করবে।
+        </p>
+    </main>
+
+    <footer
+        class="fixed bottom-4 left-0 right-0 flex justify-center items-center gap-2 text-sm text-textSecondary pointer-events-none select-none z-10 opacity-0 animate-fadeIn [animation-delay:1000ms]">
+        <span>ডেভেলপ করেছেন</span>
+        <span class="text-blue-500">Realit Developer team</span>
+    </footer>
+
+</body>
+
+</html>
